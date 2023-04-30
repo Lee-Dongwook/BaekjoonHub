@@ -1,60 +1,66 @@
 #include <iostream>
 #include <map>
+#include <vector>
 using namespace std;
-
-map<int, int> A;
-map<int, int> B;
-
-int cnt = 0;
 
 int main(void)
 {
+	map<int, int>m;
+	map<int, int>n;
+
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(0);
+	cout.tie(0);
 
-	int N, M;
-	cin >> N >> M;
+	int A, B;
+	cin >> A >> B;
 
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < A; i++)
 	{
 		int num;
 		cin >> num;
-		A.insert(make_pair(num, i));
+		m.insert(make_pair(num,num));
 	}
 
-	for (int i = 0; i < M; i++)
+	for (int j = 0; j < B; j++)
 	{
-		int sum;
-		cin >> sum;
-		B.insert(make_pair(sum, i));
+		int num;
+		cin >> num;
+		n.insert(make_pair(num, num));
 	}
 
-	for (auto iter = A.begin(); iter != A.end(); iter++)
-	{
-		int res = iter->first;
+	int a = 0;
+	int b = 0;
 
-		if (B.find(res) != B.end())
+	for (auto iter : m)
+	{
+		int k = iter.first;
+
+		if (n.find(k) != n.end())
 		{
 			continue;
 		}
 		else {
-			cnt++;
+			a++;
 		}
 	}
 
-	for (auto iter = B.begin(); iter != B.end(); iter++)
+
+	for (auto iter : n)
 	{
-		int result = iter->first;
-		if (A.find(result) != A.end())
+		int k = iter.first;
+		if (m.find(k) != m.end())
 		{
 			continue;
 		}
 		else {
-			cnt++;
+			b++;
 		}
 	}
 
-	cout << cnt << "\n";
+
+	cout << a + b;
+
 	return 0;
 }
+
