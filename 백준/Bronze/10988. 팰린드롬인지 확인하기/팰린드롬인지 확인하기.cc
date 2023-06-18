@@ -1,26 +1,25 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
 using namespace std;
 
 int main(void)
 {
-	string s;
-	cin >> s;
+	string n;
+	cin >> n;
 
-	string k = s;
-
-	reverse(s.begin(), s.end());
-
-	if (k == s)
+	string k = "";
+	for (int i = n.size() - 1; i >= 0; i--)
 	{
-		cout << 1 << endl;
+		k += n[i];
 	}
-	else
+
+	if (n == k)
 	{
-		cout << 0 << endl;
+		cout << "1";
+	}
+	else {
+		cout << "0";
 	}
 
 	return 0;
-
 }
