@@ -1,43 +1,40 @@
-
 #include <iostream>
 #include <string>
 #include <map>
-#include <vector>
 using namespace std;
 
-map<string, int> po;
-vector<string>name;
-vector<string>result;
+map<string, int> m;
+string arr[100001];
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
 	int N, M;
 	cin >> N >> M;
-	for (int i = 0; i < N; i++)
+
+	for (int i = 1; i <= N; i++)
 	{
-		string s;
-		cin >> s;
-		name.push_back(s);
-		po.insert(make_pair(s, i + 1));
+		string name;
+		cin >> name;
+		m.insert({ name,i });
+		arr[i] = name;
 	}
 
-	for (int i = 0; i < M; i++)
+	for (int i = 1; i <= M; i++)
 	{
-		string temp;
-		cin >> temp;
+		string keys;
+		cin >> keys;
 
-		if (temp[0] >= 65 && temp[0] <= 90)
+		if (m.find(keys) != m.end())
 		{
-			result.push_back(to_string(po[temp]));
+			cout << m.find(keys)->second << "\n";
 		}
-		else
-		{
-			result.push_back(name[stoi(temp) - 1]);
+		else {
+			int key = stoi(keys);
+			cout << arr[key] << "\n";
 		}
 	}
-	
-	for (int i = 0; i < result.size(); i++)
-		cout << result[i] << "\n";
-
-	return 0;
 }
