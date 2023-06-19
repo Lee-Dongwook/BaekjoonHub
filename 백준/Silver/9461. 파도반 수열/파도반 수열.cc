@@ -1,28 +1,32 @@
 #include <iostream>
 using namespace std;
 
-long long dp[100];
+long long DP[101];
 
 int main(void)
 {
-	dp[0] = 1;
-	dp[1] = 1;
-	dp[2] = 1;
-	dp[3] = 2;
-	dp[4] = 2;
-	for (int i = 5; i < 100; i++)
-	{
-		dp[i] = dp[i - 1] + dp[i - 5];
-	}
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
 
+	DP[0] = 0;
+	DP[1] = 1;
+	DP[2] = 1;
+	DP[3] = 1;
+	DP[4] = 2;
+	for (int i = 5; i <= 100;i++)
+	{
+		DP[i] = DP[i - 1] + DP[i - 5];
+	}
 
 	int T;
 	cin >> T;
-	for (int i = 1; i <= T; i++)
+	while (T--)
 	{
-		int num;
-		cin >> num;
-		cout << dp[num - 1] << "\n";
+		int n;
+		cin >> n;
+		cout << DP[n] << "\n";
 	}
+
 	return 0;
 }
