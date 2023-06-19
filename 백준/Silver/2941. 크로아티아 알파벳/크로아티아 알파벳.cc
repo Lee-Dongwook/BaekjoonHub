@@ -5,48 +5,79 @@ using namespace std;
 int main(void)
 {
 	ios_base::sync_with_stdio(false);
-	cout.tie(NULL);
-	string s;
-	cin >> s;
+	cin.tie(0);
+	cout.tie(0);
 
-	int count = s.size();
+	string word;
+	cin >> word;
 
-	for (int i = 0; i < s.size(); i++)
+	int cnt = 0;
+
+	for (int i = 0; i < word.size(); i++)
 	{
-		if (s[i] == 'c' && s[i+1] == '=')
+		cnt++;
+		if (word[i] == 'c')
 		{
-			count--;
+			if (word[i + 1] == '=' || word[i + 1] == '-')
+			{
+				cnt--;
+			}
 		}
-		else if (s[i] == 'c' && s[i + 1] == '-')
+		else if (word[i] == 'd')
 		{
-			count--;
+			if (word[i + 1] == 'z')
+			{
+				if (word[i + 2] == '=')
+				{
+					cnt--;
+				}
+			}
+			else if (word[i + 1] == '-')
+			{
+				cnt--;
+			}
 		}
-		else if (s[i] == 'd' && s[i + 1] == 'z' && s[i + 2] == '=')
+		else if (word[i] == 'l')
 		{
-			count--;
+			if (word[i + 1] == 'j')
+			{
+				cnt--;
+			}
 		}
-		else if (s[i] == 'd' && s[i + 1] == '-')
+		else if (word[i] == 'n')
 		{
-			count--;
+			if (word[i + 1] == 'j')
+			{
+				cnt--;
+			}
 		}
-		else if (s[i] == 'l' && s[i + 1] == 'j')
+		else if (word[i] == 's')
 		{
-			count--;
+			if (word[i + 1] == '=')
+			{
+				cnt--;
+			}
 		}
-		else if (s[i] == 'n' && s[i + 1] == 'j')
+		else if (word[i] == 'z')
 		{
-			count--;
+			if (i == 0)
+			{
+				if (word[i + 1] == '=')
+				{
+					cnt--;
+				}
+				
+			}
+			else {
+				if (word[i + 1] == '=')
+				{
+					cnt--;
+				}
+				
+			}
 		}
-		else if (s[i] == 's' && s[i + 1] == '=')
-		{
-			count--;
-		}
-		else if (s[i] == 'z' && s[i + 1] == '=')
-		{
-			count--;
-		}
+		
 	}
 
-	cout << count;
-	return 0;
+	cout << cnt;
 }
