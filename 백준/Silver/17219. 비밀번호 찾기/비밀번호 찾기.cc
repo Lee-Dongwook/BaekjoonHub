@@ -3,25 +3,38 @@
 #include <map>
 using namespace std;
 
-int N, M;
 map<string, string> m;
-string a, b;
 
 int main(void)
 {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+	cin.tie(0);
+	cout.tie(0);
 
+
+	int N, M;
 	cin >> N >> M;
-	for (int i = 0; i < N; i++)
+
+	while (N--)
 	{
-		cin >> a >> b;
-		m[a] = b;
+		string key;
+		string value;
+		cin >> key >> value;
+		m.insert({ key,value });
 	}
-	for (int i = 0; i < M; i++)
+
+	while (M--)
 	{
-		cin >> a;
-		cout << m[a] << '\n';
+		string key;
+		cin >> key;
+
+		auto item = m.find(key);
+		if (item != m.end())
+		{
+			cout << item->second << "\n";
+		}
+
 	}
+
 	return 0;
 }
