@@ -1,78 +1,53 @@
 #include <iostream>
-#include <vector>
-#include <map>
 #include <string>
+#include <vector>
 #include <algorithm>
+#include <map>
 using namespace std;
 
-vector<string> temp;
-vector<string> result;
+map <string, int> D;
+map <string, int> B;
 
-map<string, int> A;
-map<string, int> B;
-
-int cnt = 0;
+vector<string> vec;
 
 int main(void)
 {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(0);
+	cout.tie(0);
 
+	int N, M;
+	cin >> N >> M;
 
-	int N,M;
-	cin >> N>>M;
-
-	for (int i = 0; i < N; i++)
+	while (N--)
 	{
-		string s;
-		cin >> s;
-		A.insert(make_pair(s, i));
+		string name;
+		cin >> name;
+		D.insert({ name,1 });
+	}
+	while (M--)
+	{
+		string name;
+		cin >> name;
+		B.insert({ name,1 });
 	}
 
-	for (int i = 0; i < M; i++)
+	for (auto iter = D.begin(); iter != D.end(); iter++)
 	{
-		string c;
-		cin >> c;
-		B.insert(make_pair(c, i));
-
-	}
-
-	for(auto iter = A.begin(); iter !=A.end(); iter++)
-	{
-		string key = iter->first;
-
-		if (A.find(key) != A.end())
+		auto item = B.find(iter->first);
+		if (item != B.end())
 		{
-			temp.push_back(key);
-		}
-		else 
-		{
-			continue;
-		}
-			
-	}
-
-	for (int i = 0; i < temp.size(); i++)
-	{
-		string key = temp[i];
-		if (B.find(key) != B.end())
-		{
-			cnt++;
-			result.push_back(key);
-		}
-		else {
-			continue;
+			vec.push_back(iter->first);
 		}
 	}
 
-	sort(result.begin(), result.end());
+	sort(vec.begin(), vec.end());
 
-	cout << cnt << "\n";
+	cout << vec.size() << "\n";
 
-	for (int i = 0; i < result.size(); i++)
+	for (int i = 0; i < vec.size(); i++)
 	{
-		cout << result[i] << "\n";
+		cout << vec[i] << "\n";
 	}
 
 	return 0;
