@@ -1,36 +1,39 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
-
 using namespace std;
 
-int stairCnt;
-vector<int> stairs;
-vector<int> dp;
+long long DP[301];
+long long stair[301];
 
-
-int main() {
+int main(void)
+{
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(0);
+	cout.tie(0);
 
-	cin >> stairCnt;
-	dp.resize(stairCnt);
+	
 
-	int num;
-	for (int i = 0; i < stairCnt; i++) {
+	stair[0] = 0;
+
+	int N;
+	cin >> N;
+	for (int i = 1; i <= N; i++)
+	{
+		int num;
 		cin >> num;
-		stairs.push_back(num);
+		stair[i] = num;
 	}
 
-	dp[0] = stairs[0];
-	dp[1] = max(stairs[1], stairs[0] + stairs[1]);
-	dp[2] = max(stairs[1] + stairs[2], stairs[0] + stairs[2]);
+	DP[0] = 0;
+	DP[1] = stair[1];
+	DP[2] = max(stair[2], stair[1] + stair[2]);
+	DP[3] = max(stair[2] + stair[3] , stair[1] + stair[3]);
 
-	for (int i = 3; i < stairCnt; i++) {
-		dp[i] = max(dp[i - 2] + stairs[i], dp[i - 3] + stairs[i - 1] + stairs[i]);
+	for (int i = 4; i <= N; i++)
+	{
+		DP[i] = max(DP[i - 3] + stair[i-1] + stair[i], DP[i - 2] + stair[i]);
 	}
 
-	cout << dp[stairCnt - 1] << endl;
+	cout << DP[N];
 	return 0;
 }
