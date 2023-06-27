@@ -1,39 +1,71 @@
 #include <iostream>
 #include <string>
-#include <set>
+#include <vector>
 #include <algorithm>
+#include <map>
 using namespace std;
 
-set<string> name;
+vector<string> vec;
+map<string, int> m;
 
 int main(void)
 {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(0);
+	cout.tie(0);
 
-	int N;
-	cin >> N;
+	int n;
+	cin >> n;
 
-	for (int i = 0; i < N; i++)
+	while (n--)
 	{
-		string a, b;
-		cin >> a >> b;
-		
-		if (b == "enter")
+		string name;
+		string toggle;
+		cin >> name >> toggle;
+
+		if (toggle == "enter")
 		{
-			name.insert(a);
+			auto iter = m.find(name);
+			if (iter != m.end())
+			{
+				iter->second = 1;
+			}
+			else {
+				m.insert({ name,1 });
+			}
 		}
-		else
+		else if (toggle == "leave")
 		{
-			name.erase(a);
+			auto iter = m.find(name);
+			if (iter != m.end())
+			{
+				iter->second = 0;
+			}
+			else {
+				continue;
+			}
+		}
+	}
+
+	for (auto iter = m.begin(); iter != m.end(); iter++)
+	{
+		if (iter->second == 1)
+		{
+			vec.push_back(iter->first);
+		}
+		else if (iter->second == 0)
+		{
+			continue;
 		}
 	}
 	
-	for (auto iter = name.rbegin(); iter != name.rend(); iter++)
+	sort(vec.begin(), vec.end(), greater<>());
+
+	for (int i = 0; i < vec.size(); i++)
 	{
-		cout << *iter << "\n";
+		cout << vec[i] << "\n";
 	}
+
 
 	return 0;
 }
