@@ -3,38 +3,45 @@
 #include <map>
 using namespace std;
 
-map <string, int> m;
-int cnt = 0;
+map<string, int>m;
 
 int main(void)
 {
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+
 	int N, M;
 	cin >> N >> M;
-	for (int i = 0; i < N; i++)
+
+	int cnt = 0;
+
+	while (N--)
 	{
-		string s;
-		cin >> s;
-		m.insert(make_pair(s, i));
+		string name;
+		cin >> name;
+
+		m.insert({ name,1 });
+
 	}
 
-	for (int i = 0; i < M; i++)
+	while (M--)
 	{
-		string k;
-		cin >> k;
+		string result;
+		cin >> result;
 
-		string key = k;
+		auto iter = m.find(result);
 
-		if (m.count(key) != 0)
+		if (iter != m.end())
 		{
 			cnt++;
 		}
-		else
-		{
+		else {
 			continue;
 		}
 	}
 
-	cout << cnt << "\n";
-	return 0;
+	cout << cnt;
 
+	return 0;
 }
