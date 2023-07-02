@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
-#include <utility>
 using namespace std;
+vector<vector<char>> vec;
+vector<int> res;
 string WB[8] = {
         "WBWBWBWB",
         "BWBWBWBW",
@@ -23,54 +25,68 @@ string BW[8] = {
         "BWBWBWBW",
         "WBWBWBWB"
 };
-string board[50];
-int WB_cnt(int x, int y)
+
+int WBnumber(int x, int y)
 {
     int cnt = 0;
     for(int i = 0; i < 8; i++)
     {
         for(int j = 0; j < 8; j++)
         {
-            if(board[x+i][y+j] != WB[i][j])
+            if(vec[x+i][y+j] != WB[i][j])
                 cnt++;
         }
 
     }
     return cnt;
 }
-int BW_cnt(int x, int y)
+
+int BWnumber(int x, int y)
 {
     int cnt = 0;
     for(int i = 0; i < 8; i++)
     {
         for(int j = 0; j < 8; j++)
         {
-            if(board[x+i][y+j] != BW[i][j])
+            if(vec[x+i][y+j] != BW[i][j])
                 cnt++;
         }
 
     }
     return cnt;
 }
+
 int main() {
-    int size[2];
-    int cnt;
-    int min_val = 12345;
-    pair<int, int> p1;
-    cin >> p1.first >> p1.second;
-    for(int i = 0; i < p1.first; i++)
-        cin >> board[i];
-    for(int i = 0; i + 8 <= p1.first; i++)
+    
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    int N,M;
+    cin>>N>>M;
+    
+    vec.resize(N, vector<char>(M));
+    
+    for(int i=0;i<N;i++)
     {
-        for(int j = 0; j + 8 <= p1.second; j++)
+        for(int j = 0; j < M ; j++)
+        {
+            cin>>vec[i][j];
+        }
+    }
+    
+    for(int i = 0; i <= N - 8; i++)
+    {
+        for(int j = 0; j <= M - 8; j++)
         {
             int tmp;
-            tmp = min(WB_cnt(i,j),BW_cnt(i,j));
-            if(tmp < min_val) {
-                min_val = tmp;
-            }
+            tmp = min(WBnumber(i,j),BWnumber(i,j));
+            res.push_back(tmp);
         }
     }
-    cout << min_val;
+    
+    sort(res.begin(),res.end());
+    
+    cout << res[0];
     return 0;
 }
