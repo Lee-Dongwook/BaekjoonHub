@@ -1,67 +1,102 @@
 #include <iostream>
-#include <cstring>
+#include <queue>
 using namespace std;
 
-int a[51][51] = { 0 };
-bool isvisited[51][51] = { 0 };
+int dx[4] = {-1, 1, 0, 0}; // 상하좌우 x좌표
+int dy[4] = {0, 0, -1, 1}; // 상하좌우 y좌표
 
-int dx[4] = { -1,0,1,0 };
-int dy[4] = { 0,1,0,-1 };
-
-int M;
-int N;
-int K;
-
-
-void dfs(int x, int y)
+int BFS(int** board, bool** isvisited, int M, int N, int x, int y)
 {
-	isvisited[x][y] = true;
-	for (int i = 0; i < 4; i++)
-	{
-		int nx = x + dx[i];
-		int ny = y + dy[i];
+    int count = 0;
+    queue<pair<int, int>> q;
+    q.push(make_pair(x, y));
+    isvisited[x][y] = true;
 
-		if (nx < 0 || nx > N || ny < 0 || ny > M)
-			continue;
-		if (!isvisited[nx][ny] && a[nx][ny] == 1)
-		{
-			dfs(nx, ny);
-		}
-	}
+    while (!q.empty())
+    {
+        int cur_x = q.front().first;
+        int cur_y = q.front().second;
+        q.pop();
+
+        count++;
+
+        for (int i = 0; i < 4; i++)
+        {
+            int next_x = cur_x + dx[i];
+            int next_y = cur_y + dy[i];
+
+            if (next_x >= 0 && next_x < M && next_y >= 0 && next_y < N)
+            {
+                if (board[next_x][next_y] == 1 && !isvisited[next_x][next_y])
+                {
+                    q.push(make_pair(next_x, next_y));
+                    isvisited[next_x][next_y] = true;
+                }
+            }
+        }
+    }
+
+    return count;
 }
 
-int main(void)
+int main()
 {
-	int T;
-	cin >> T;
-	for (int i = 1; i <= T; i++)
-	{
-		cin >> M >> N >> K;
-		int cnt = 0;
-		for (int i = 0; i < K; i++)
-		{
-			int x,y;
-			cin >> x >> y;
-			a[y][x] = 1;
-		}
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-		for (int i = 0; i < N; i++)
-		{
-			for (int j = 0; j < M; j++)
-			{
-				if (a[i][j] == 1)
-				{
-					if (!isvisited[i][j])
-					{
-						cnt++;
-						dfs(i, j);
-					}
-				}
-			}
-		}
+    int T;
+    cin >> T;
 
-		cout << cnt << '\n';
-		memset(isvisited, false, sizeof(isvisited));
-		memset(a, 0, sizeof(a));
-	}
+    while (T--)
+    {
+        int M, N, K;
+        cin >> M >> N >> K;
+
+        int** board = new int*[M];
+        bool** isvisited = new bool*[M];
+        for (int i = 0; i < M; i++)
+        {
+            board[i] = new int[N];
+            isvisited[i] = new bool[N];
+            for (int j = 0; j < N; j++)
+            {
+                board[i][j] = 0;
+                isvisited[i][j] = false;
+            }
+        }
+
+        while (K--)
+        {
+            int x, y;
+            cin >> x >> y;
+            board[x][y] = 1;
+        }
+
+        int result = 0;
+
+        for (int i = 0; i < M; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                if (board[i][j] == 1 && !isvisited[i][j])
+                {
+                    BFS(board, isvisited, M, N, i, j);
+                    result++;
+                }
+            }
+        }
+
+        cout << result << "\n";
+
+        for (int i = 0; i < M; i++)
+        {
+            delete[] board[i];
+            delete[] isvisited[i];
+        }
+        delete[] board;
+        delete[] isvisited;
+    }
+
+    return 0;
 }
