@@ -1,55 +1,66 @@
 #include <iostream>
 #include <queue>
-#include <vector>
 #include <cmath>
 using namespace std;
 
-struct comp
-{
-	bool operator()(int a, int b)
+
+struct ComparePair{
+bool operator()(pair<int,int> a, pair<int,int>b)
+ { 
+	if(a.first == b.first)
 	{
-		if (abs(a) == abs(b))
-		{
-			return a > b;
-		}
-		else
-			return abs(a) > abs(b);
+		return a.second > b.second;
 	}
+	return abs(a.first) > abs(b.first);
+  }
 };
+
+priority_queue<pair<int,int>, vector<pair<int,int>>, ComparePair>pq;
 
 int main(void)
 {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-
-	int N, x;
-	cin >> N;
-
-	priority_queue<int, vector<int>, comp> q;
-
-	for (int i = 0; i < N; i++)
+	cin.tie(0);
+	cout.tie(0);
+	
+	int N;
+	cin>>N;
+	
+	while(N--)
 	{
-		int temp;
-		cin >> temp;
-
-		if (temp == 0)
+		int num;
+		cin>>num;
+		
+		if(num != 0 && num > 0)
 		{
-			if (q.empty())
+			pq.push({num,1});
+		}
+		else if(num != 0 && num < 0)
+		{
+			pq.push({abs(num),0});
+		}
+		else if(num == 0)
+		{
+			if(pq.empty())
 			{
-				cout << 0 << "\n";
+				cout<<0<<"\n";
 			}
 			else
 			{
-				cout << q.top() << "\n";
-				q.pop();
+				if(pq.top().second == 0)
+				{
+					cout<<-pq.top().first<<"\n";
+					pq.pop();
+				}
+				else if(pq.top().second == 1)
+				{
+					cout<<pq.top().first<<"\n";
+					pq.pop();
+				}
 			}
 		}
-		else
-		{
-			q.push(temp);
-		}
+		
 	}
-
+	
 	return 0;
 }
