@@ -1,75 +1,82 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <climits>
+#define INF 987654321
 using namespace std;
 
+int V,E;
+int K;
 
-typedef pair<int, int> edge; 
-vector<vector<edge>> list; //인접리스트
-vector<bool> visited;//방문여부
-vector<int> mdist;//최소거리
-int V, E ,K; //정점, 간선, 가중치
-priority_queue<edge, vector<edge>, greater<edge>>q;
+vector<pair<int, int>> vec[20001];
+int D[20001];
+priority_queue<pair<int,int>>pq;
 
-
-int main(void)
+void init()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-
-	cin >> V >> E >> K;
-	mdist.resize(V + 1);
-	fill(mdist.begin(), mdist.end(), INT_MAX);
-	visited.resize(V + 1);
-	fill(visited.begin(), visited.end(), false);
-	list.resize(V + 1);
-
-	for (int i = 0; i < E; i++)
+	for(int i=0;i<20001;i++)
 	{
-		int u, v, w;
-		cin >> u >> v >> w;
-		list[u].push_back(make_pair(v, w));
+		D[i] = INF;
 	}
+}
 
-	q.push(make_pair(0, K));
-	mdist[K] = 0;
-
-	while (!q.empty())
+void Dijikstra(int start)
+{
+	pq.push({0,start});
+	D[start] = 0;
+	while(!pq.empty())
 	{
-		edge cur = q.top();
-		q.pop();
-		int c = cur.second;
-		if (visited[c])continue;
-		visited[c] = true;
-
-		for (int i = 0; i < list[c].size(); i++)
+		int cur_cost = -pq.top().first; 
+		int cur_x = pq.top().second;
+		pq.pop();
+		
+		if(D[cur_x] < cur_cost)
 		{
-			edge temp = list[c][i];
-			int next = temp.first;
-			int value = temp.second;
-
-			if (mdist[next] > mdist[c] + value)
+			continue;
+		}
+		
+		for(int i=0;i<vec[cur_x].size();i++)
+		{
+			int next_x = vec[cur_x][i].second;
+			int next_cost = vec[cur_x][i].first;
+			if(D[next_x] > cur_cost + next_cost)
 			{
-				mdist[next] = mdist[c] + value;
-				q.push(make_pair(mdist[next], next));
+				D[next_x] = cur_cost + next_cost;
+				pq.push({-D[next_x],next_x});
 			}
 		}
+		
 	}
+}
 
-	for (int i = 1; i <= V; i++)
+int	main() {
+	
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+	
+	cin>>V>>E;
+	cin>>K;
+	
+	while(E--)
 	{
-		if (visited[i])
+		int start,end,cost;
+		cin>>start>>end>>cost;
+		
+		vec[start].push_back({cost,end});
+	}
+	
+	init();
+	Dijikstra(K);
+	for(int i=1;i<=V;i++)
+	{
+		if(D[i] == INF)
 		{
-			cout << mdist[i] << "\n";
-
+			cout<<"INF"<<"\n";
 		}
-		else
-		{
-			cout << "INF" << "\n";
+		else{
+			cout<<D[i]<<"\n";
 		}
 	}
-
+	
 	return 0;
 }
