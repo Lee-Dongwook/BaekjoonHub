@@ -1,78 +1,75 @@
 #include <iostream>
-#include <vector>
 #include <queue>
-
 using namespace std;
 
-int T, l;
-int current_x, current_y, target_x, target_y;
-int isvisited[301][301];
+int T, N;
+int dx[8] = {-2, -1, 1, 2, 2, 1, -1, -2};
+int dy[8] = {1, 2, 2, 1, -1, -2, -2, -1};
 int chess[301][301];
-int dy[8] = {-2,-1,1,2,2,1,-1,-2};
-int dx[8] = {1,2,2,1,-1,-2,-2,-1};
 
-queue<pair<int,int>> q;
-
-void reset() {
-	while (!q.empty()) q.pop();
-	for (int i = 0; i < 301; i++) {
-		for (int j = 0; j < 301; j++) {
-			isvisited[i][j] = 0;
-			chess[i][j] = 0;
-		}
-	}
-}
-
-void bfs(int x,int y)
+int BFS(int x, int y, int a, int b)
 {
-	q.push({ x,y });
-	isvisited[x][y] = true;
-	while (!q.empty())
-	{
-		int a = q.front().first;
-		int b = q.front().second;
-		q.pop();
-		if (a == target_x && b == target_y )
-		{
-			cout << chess[a][b] << "\n";
-			while (!q.empty())
-			{
-				q.pop();
-			}
+    if (x == a && y == b)
+        return 0; 
 
-			break;
-		}
+    queue<pair<int, int>> q;
+    q.push({x, y});
+    chess[x][y] = 0;
 
-		for (int i = 0; i < 8; i++)
-		{
-			int na = a + dx[i];
-			int nb = b + dy[i];
-			if (0 <= na && 0 <= nb && na < l && nb < l && !isvisited[na][nb])
-			{
-				q.push({ na,nb });
-				isvisited[na][nb] = true;
-				chess[na][nb] = chess[a][b] + 1;
-			}
-		}
-	}
+    while (!q.empty())
+    {
+        int cur_x = q.front().first;
+        int cur_y = q.front().second;
+        q.pop();
+
+        if (cur_x == a && cur_y == b)
+            return chess[cur_x][cur_y];
+
+        for (int i = 0; i < 8; i++)
+        {
+            int next_x = cur_x + dx[i];
+            int next_y = cur_y + dy[i];
+
+            if (next_x < 0 || next_x >= N || next_y < 0 || next_y >= N)
+            {
+                continue;
+            }
+
+            if (chess[next_x][next_y] == -1)
+            {
+                chess[next_x][next_y] = chess[cur_x][cur_y] + 1;
+                q.push({next_x, next_y});
+            }
+        }
+    }
+
+    return -1;
 }
 
-int main(void)
+int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> T;
-	for (int i = 0; i < T; i++)
-	{
-		cin >> l;
-		cin >> current_x >> current_y;
-		cin >> target_x >> target_y;
+    cin >> T;
 
-		bfs(current_x, current_y);
-		reset();
-		
-	}
+    while (T--)
+    {
+        cin >> N;
+        int start_x, start_y;
+        int end_x, end_y;
+        cin >> start_x >> start_y;
+        cin >> end_x >> end_y;
 
+    
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                chess[i][j] = -1;
+            }
+        }
+
+        int res = BFS(start_x, start_y, end_x, end_y);
+        cout << res << "\n";
+    }
+
+    return 0;
 }
-//참고 : tooo1.tistory.com/171
