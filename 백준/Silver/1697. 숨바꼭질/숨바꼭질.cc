@@ -1,59 +1,75 @@
 #include <iostream>
-#include <vector>
-#define MAX 200001
 #include <queue>
 using namespace std;
 
-int N, K;
-bool visited[MAX];
-queue<pair<int,int>> q;
+int N,K;
+int line[100001];
+bool isvisited[100001];
+queue<int> q;
 
-void BFS(int x)
+void init()
 {
-	q.push({ x,0 });
-	visited[x] = true;
-
-	while (!q.empty())
+	for(int i=0;i<100001;i++)
 	{
-		int cur = q.front().first;
-		int time = q.front().second;
-		q.pop();
+		line[i] = 0;
+		isvisited[i] = false;
+	}
+}
 
-		if (cur < 0 || cur >100000)continue;
-		if (cur == K)
+void BFS(int start)
+{
+	q.push(start);
+	isvisited[start] = true;
+	
+	while(!q.empty())
+	{
+		int cur_x = q.front();
+		q.pop();
+		
+		if(cur_x == K)
 		{
-			cout << time;
 			break;
 		}
-		if (visited[cur * 2] == false)
+		if(cur_x + 1 >= 0 && cur_x + 1 < 100001)
 		{
-			visited[cur * 2] = true;
-			q.push({ cur * 2,time + 1 });
+			if(!isvisited[cur_x + 1])
+			{
+				isvisited[cur_x + 1] = true;
+				line[cur_x + 1] = line[cur_x] + 1;
+				q.push(cur_x + 1);
+			}
 		}
-		if (visited[cur + 1] == false)
+		if(cur_x - 1 >= 0 && cur_x - 1 < 100001)
 		{
-			visited[cur + 1] = true;
-			q.push({ cur + 1,time + 1 });
+			if(!isvisited[cur_x - 1])
+			{
+				isvisited[cur_x - 1] = true;
+				line[cur_x - 1] = line[cur_x] + 1;
+				q.push(cur_x -1);
+			}
 		}
-		if (visited[cur - 1] == false)
+		if(cur_x * 2 >= 0 && cur_x * 2 < 100001)
 		{
-			visited[cur - 1] = true;
-			q.push({ cur - 1,time + 1 });
+			if(!isvisited[cur_x * 2])
+			{
+				isvisited[cur_x * 2] = true;
+				line[cur_x * 2] = line[cur_x] + 1;
+				q.push(cur_x * 2);
+			}
 		}
 	}
 }
 
 
-int main(void)
-{
+int main() {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-
-	cin >> N >> K;
-
-
+	cin.tie(0);
+	cout.tie(0);
+	
+	cin>>N>>K;
 	BFS(N);
-
+	cout<<line[K];
+	
+	
 	return 0;
 }
