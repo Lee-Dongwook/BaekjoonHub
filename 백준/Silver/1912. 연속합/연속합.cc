@@ -1,18 +1,38 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 using namespace std;
-int N[100000];
-int dp[100000];
-int main() {
-	int n;
-	cin >> n;
-	for (int i = 0; i < n; i++) cin >> N[i];
 
-	dp[0] = N[0];
-	int result = dp[0];
-	for (int i = 1; i < n; i++) {
-		dp[i] = max(dp[i - 1] + N[i], N[i]);
-		result = max(result, dp[i]);
+int DP[100001];
+vector<int>vec;
+
+int main() {
+	
+	ios_base::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+	
+	int N;
+	cin>>N;
+	
+	for(int i=0;i<N;i++)
+	{
+		int num;
+		cin>>num;
+		vec.push_back(num);
+		DP[i] = num;
 	}
-	cout << result << endl;
+	
+	int max_num = DP[0];
+	for(int i=0;i<vec.size();i++)
+	{
+		DP[i] = max(DP[i], DP[i-1] + vec[i]);
+		if(DP[i] > max_num)
+		{
+			max_num = DP[i];
+		}
+	}
+	
+	cout<<max_num;
+	
+	return 0;
 }
