@@ -1,36 +1,38 @@
 #include <iostream>
 #include <string>
+#define MAX 987654321
 using namespace std;
 
-int Find(int N)
-{
-	int i = 666;
-	int series = 0;
-	string target;
-	while (1)
-	{
-		target = to_string(i);
-		for (int j = 0; j < target.length() - 2; j++)
-		{
-			if (target[j] == '6' && target[j + 1] == '6' && target[j + 2] == '6')
-			{
-				series++;
-				if (series == N)
-					return i;
-				break;
-			}
-		
-		}
-		i++;
-	}
-}
-
-
+int N;
 
 int main(void)
 {
-	int N;
-	cin >> N;
-	cout << Find(N);
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin>>N;
+    
+    int result = 0;
+    int cnt = 0;
+    
+    for(int i=666; i < MAX; i++)
+    {
+        if(cnt == N){
+            break;
+        }
+        
+        string temp = to_string(i);
+        
+        if(temp.find("666") != string::npos)
+        {
+            result = stoi(temp);
+            cnt++;
+        }
+    }
+    
+    
+    cout<<result;
+    
+    return 0;
 }
