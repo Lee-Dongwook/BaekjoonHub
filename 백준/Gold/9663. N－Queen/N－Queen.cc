@@ -1,41 +1,52 @@
 #include <iostream>
-#include <cmath>
-#define MAX 15
 using namespace std;
 
-int col[MAX];
-int N, result = 0;
+int N;
+int column[15];
+int cnt = 0;
 
-bool Check(int level)
+bool ischecked(int height)
 {
-	for (int i = 0; i < level; i++)
-	
-		if (col[i] == col[level] || abs(col[i] - col[level]) == level - i)
-		
-			return false;
-
-		return true;
-	
+    for(int i = 0; i < height; i++)
+    {
+        if(column[height] == column[i] || height - i == abs(column[height] - column[i]))
+        {
+            return false;
+        }
+        
+    }
+    
+    return true;
 }
 
-void nqueen(int x)
+void Nqueen(int start)
 {
-	if (x == N) result++;
-	else
-	{
-		for (int i = 0; i < N; i++)
-		{
-			col[x] = i;
-			if (Check(x))
-				nqueen(x + 1);
-		}
-	}
+    if(start == N)
+    {
+       cnt++;
+       return;
+    }
+    
+    for(int j = 0; j < N; j++)
+    {
+        column[start] = j;
+        
+        if(ischecked(start))
+        {
+            Nqueen(start + 1);
+        }
+    }
 }
 
 int main(void)
 {
-	cin >> N;
-	nqueen(0);
-	cout << result;
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin>>N;
+    Nqueen(0);
+    cout<<cnt;
+    
+    return 0;
 }
