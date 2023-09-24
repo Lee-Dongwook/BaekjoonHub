@@ -1,32 +1,46 @@
 #include <iostream>
-# define MAX 8
+#include <vector>
 using namespace std;
 
-int n, m;
-int arr[MAX] = { 0, };
-int visited[MAX] = { 0, };
+int N,M;
+vector<vector<int>>result;
+vector<int> selected;
 
-void dfs(int cnt)
+void dfs(int start, int cnt)
 {
-	if (cnt == m)
-	{
-		for (int i = 0; i < m; i++)
-		{
-			cout << arr[i] << " ";
-		}
-		cout << "\n";
-		return;
-	}
-
-	for (int i = 1; i <= n; i++)
-	{
-		arr[cnt] = i;
-		dfs(cnt + 1);
-	}
+    if(cnt == 0)
+    {
+        result.push_back(selected);
+        return;
+    }
+    else{
+        for(int i = 1; i <= N; i++)
+        {
+            selected.push_back(i);
+            dfs(i+1, cnt-1);
+            selected.pop_back();
+        }
+    }
 }
 
-int main()
+
+int main(void)
 {
-	cin >> n >> m;
-	dfs(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin>>N>>M;
+    
+    dfs(1,M);
+    
+    for(const vector<int> &temp : result)
+    {
+        for(int tmp : temp){
+            cout<<tmp<<' ';
+        }
+        cout<<"\n";
+    }
+    
+    return 0;
 }
