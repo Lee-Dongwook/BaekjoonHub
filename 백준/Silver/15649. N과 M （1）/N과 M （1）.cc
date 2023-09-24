@@ -1,33 +1,57 @@
 #include <iostream>
-#define MAX 9
+#include <vector>
 using namespace std;
 
-int n,m;
-int arr[MAX] = {0,};
-bool visited[MAX] = {0,};
+int N,M;
 
-void dfs(int cnt)
+vector<vector<int>>result;
+vector<int> selected;
+vector<bool> isvisited;
+
+void init()
 {
-    if(cnt == m)
+    isvisited.resize(N, false);
+}
+
+void dfs(int start, int cnt)
+{
+    if(cnt == 0)
     {
-        for(int i = 0; i < m; i++)
-            cout << arr[i] << ' ';
-        cout << '\n';
+        result.push_back(selected);
         return;
     }
-    for(int i = 1; i <= n; i++)
+    
+    for(int i = 1; i <= N; i++)
     {
-        if(!visited[i])
+        if(!isvisited[i])
         {
-            visited[i] = true;
-            arr[cnt] = i;
-            dfs(cnt+1);
-            visited[i] = false;
+          isvisited[i] = true;
+          selected.push_back(i);
+          dfs(i + 1, cnt - 1);
+          selected.pop_back();
+          isvisited[i] = false;
         }
     }
 }
 
-int main() {
-    cin >> n >> m;
-    dfs(0);
+int main(void)
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin >> N >> M;
+    
+    init();
+    dfs(1,M);
+    
+    for(const vector<int>& temp : result)
+    {
+        for(int tmp : temp){
+            cout << tmp << ' ';
+        }
+        cout<< "\n";
+    }
+    
+    return 0;
 }
