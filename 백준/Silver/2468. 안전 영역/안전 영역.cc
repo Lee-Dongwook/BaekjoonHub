@@ -1,82 +1,108 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <climits>
 #include <queue>
-
 using namespace std;
 
-int M = INT_MIN;
+bool isvisited[101][101];
+int map[101][101];
+
+int dx[4] = {-1,1,0,0};
+int dy[4] = {0,0,-1,1};
+
 int n;
+int safe;
+queue<pair<int,int>>q;
 
-int dx[4] = { -1,1,0,0 };
-int dy[4] = { 0,0,-1,1 };
+void bfs(int height)
+{
+    while(!q.empty())
+    {
+        int cur_x = q.front().first;
+        int cur_y = q.front().second;
+        
+        q.pop();
+        
+        for(int i = 0; i < 4; i++)
+        {
+            int next_x = cur_x + dx[i];
+            int next_y = cur_y + dy[i];
+            
+            if(next_x < 0 || next_x >= n || next_y < 0 || next_y >=n)
+            {
+                continue;
+            }
+            
+            if(map[next_x][next_y] <= height || isvisited[next_x][next_y] == true)
+            {
+                continue;
+            }
+            
+            isvisited[next_x][next_y] = true;
+            q.push({next_x,next_y});
+        }
+    }
+}
 
-int arr[100][100];
-int visited[100][100];
+void init()
+{
+    safe = 0;
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            isvisited[i][j] = false;
+        }
+    }
+}
 
 int main(void)
 {
-	cin >> n;
-	int ans = 0;
-
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			cin >> arr[i][j];
-			if (M < arr[i][j])
-			{
-				M = arr[i][j];
-			}
-		}
-	}
-
-	for (int h = 0; h <= M; h++)
-	{
-		queue<pair<int, int>>q;
-		int safe = 0;
-		for (int i = 0; i < n; i++)
-		{
-			for (int j = 0; j < n; j++)
-			{
-				if (arr[i][j] <= h || visited[i][j] != 0)continue;
-				q.push({ i,j });
-				safe++;
-				while (!q.empty())
-				{
-					int cur_x = q.front().first;
-					int cur_y = q.front().second;
-
-					q.pop();
-
-					for (int dir = 0; dir < 4; dir++)
-					{
-						int nx = cur_x + dx[dir];
-						int ny = cur_y + dy[dir];
-
-						if (nx < 0 || ny < 0 || nx >= n || ny >= n)continue;
-						if (visited[nx][ny] != 0 || arr[nx][ny] <= h)continue;
-						q.push({ nx,ny });
-						visited[nx][ny] = 1;
-					}
-				}
-			}
-		}
-		if (ans <= safe)
-		{
-			ans = safe;
-		}
-
-		for (int i = 0; i < n; i++)
-		{
-			for (int j = 0; j < n; j++)
-			{
-				visited[i][j] = 0;
-			}
-		}
-	}
-
-	cout << ans;
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    int height = 0;
+    int cnt = 0;
+    
+    cin>>n;
+    
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            cin>>map[i][j];
+            if(height < map[i][j])
+            {
+                height = map[i][j];
+            }
+        }
+    }
+    
+    while(height >= 0)
+    {
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(map[i][j] > height && isvisited[i][j] == false)
+                {
+                    q.push({i,j});
+                    bfs(height);
+                    safe += 1;
+                }
+            }
+        }
+    
+    
+      if(cnt < safe)
+      {
+         cnt = safe;
+      }
+    
+      init();
+      height--;
+   }
+   
+   cout<<cnt;
+   
+    return 0;
 }
