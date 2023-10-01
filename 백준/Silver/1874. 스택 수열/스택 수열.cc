@@ -1,43 +1,45 @@
 #include <iostream>
-#include <stack>
 #include <vector>
+#include <stack>
 using namespace std;
 
-int main()
-{
-	stack<int> s;
-	vector<char> result;
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
 
-	int cnt = 1;
-	int n;
-	cin >> n;
+    int n;
+    cin >> n;
 
-	for (int i = 0; i < n; i++)
-	{
-		int x;
-		cin >> x;
+    vector<int> sequence(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> sequence[i];
+    }
 
-		while (cnt <= x)
-		{
-			s.push(cnt);
-			cnt++;
-			result.push_back('+');
-		}
+    stack<int> s;
+    vector<char> result;
 
-		if (s.top() == x)
-		{
-			s.pop();
-			result.push_back('-');
-		}
-		else
-		{
-			cout << "NO";
-			return 0;
-		}
-	}
+    int current = 1; 
+    for (int num : sequence) {
+        while (s.empty() || s.top() != num) {
+            if (current > n) {
+                cout << "NO\n";
+                return 0;
+            }
+            s.push(current++);
+            result.push_back('+');
+        }
 
-	for (int i = 0; i < result.size(); i++)
-	{
-		cout << result[i] << "\n";
-	}
+        if (s.top() == num) {
+            s.pop();
+            result.push_back('-');
+        }
+    }
+
+    for (char op : result) {
+        cout << op << '\n';
+    }
+
+    return 0;
 }
