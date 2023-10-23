@@ -1,30 +1,43 @@
 #include <iostream>
-#define MAX 9
+#include <vector>
 using namespace std;
 
-int n,m;
-int arr[MAX] = {0,};
-bool visited[MAX] = {0,};
+int N, M;
+vector<int> v;
 
-void dfs(int num, int cnt)
+void permutation(int start, int depth)
 {
-    if(cnt == m)
+    if(v.size() == depth)
     {
-        for(int i = 0; i < m; i++)
-            cout << arr[i] << ' ';
-        cout << '\n';
+        for(int i = 0; i < v.size(); i++)
+        {
+            cout << v[i] <<" ";
+        }
+        
+        cout << "\n";
+        
         return;
     }
-    for(int i = num; i <= n; i++)
+    
+    for(int i = start; i <= N; i++)
     {
-            visited[i] = true;
-            arr[cnt] = i;
-            dfs(i,cnt+1);
-            visited[i] = false;
+        v.push_back(i);
+        permutation(i,depth);
+        v.pop_back();
     }
+    
 }
 
-int main() {
-    cin >> n >> m;
-    dfs(1,0);
+
+int main(void)
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin >> N >> M;
+    
+    permutation(1,M);
+    
+    return 0;
 }
