@@ -1,76 +1,67 @@
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <queue>
 #include <algorithm>
 using namespace std;
 
-vector<vector<int>>A;
 int N, M, K, X;
-int a, b;
-queue<int>q;
-vector<int>visited;
-vector<int>result;
 
-void bfs(int x)
-{
-	q.push(x);
-	visited[x]++;
+vector<int> vec[300001];
+int isvisited[300001];
+vector<int> ans;
+queue<int> q;
 
-	while (!q.empty())
-	{
-		int n = q.front();
-		q.pop();
-		for (int i : A[n])
-		{
-			if (visited[i] == -1)
-			{
-				visited[i] = visited[n] + 1;
-				q.push(i);
-			}
-		}
-	}
+void BFS(int start) {
+    q.push(start);
+    isvisited[start] += 1;
+    
+    while(!q.empty()) {
+        int current = q.front();
+        q.pop(); 
+        
+        for(int i = 0; i < vec[current].size(); i++) {
+            int next = vec[current][i];
+            
+            if(isvisited[next] == -1) {
+                isvisited[next] = isvisited[current] + 1;
+                q.push(next);
+            }
+        }
+    }
 }
 
-int main(void)
-{
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-
-	cin >> N >> M >> K >> X;
-
-	A.resize(N + 1);
-
-	for (int i = 0; i < M; i++)
-	{
-		cin >> a >> b;
-		A[a].push_back(b);
-	}
-
-	visited.resize(N + 1);
-	for (int i = 0; i <= N; i++)
-	{
-		visited[i] = -1;
-	}
-
-	bfs(X);
-
-	for (int i = 0; i <= N; i++)
-	{
-		if (visited[i] == K)
-		{
-			result.push_back(i);
-		}
-	}
-	if (result.empty())
-	{
-		cout << -1 << "\n";
-	}
-	else{
-		sort(result.begin(), result.end());
-		for (int temp : result)
-		{
-			cout << temp << "\n";
-		}
-	}
+int main(void) {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin >> N >> M >> K >> X;
+    fill(isvisited, isvisited + N + 1, -1);
+    
+    for(int i = 0; i < M; i++) {
+        int start, end;
+        cin >> start >> end;
+        
+        vec[start].push_back(end);
+    }
+    
+    BFS(X);
+    
+    for(int i = 0; i <= N; i++) {
+        if(isvisited[i] == K) {
+            ans.push_back(i);
+        }
+    }
+    
+    if(ans.empty()) {
+        cout << -1 << "\n";
+    } else {
+        sort(ans.begin(), ans.end());
+        
+        for(int a : ans) {
+            cout << a << "\n";
+        }
+    }
+    
+    return 0;
 }
