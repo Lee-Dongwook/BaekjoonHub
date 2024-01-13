@@ -1,66 +1,65 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <climits>
+#define MAX_INT 987654321
 using namespace std;
 
-typedef pair<int, int>edge;
-vector<vector<edge>>res;
-vector<int> mindist;
-vector<bool>visited;
-priority_queue<edge, vector<edge>, greater<edge>>q;
-
 int N, M;
+vector<pair<int,int>> adjList[1001];
+int dist[1001];
+priority_queue<pair<int,int>> pq;
+
+void Dijkstra(int start)
+{
+    pq.push({0, start});
+    dist[start] = 0;
+    
+    while(!pq.empty())
+    {
+       int current_cost = -pq.top().first;
+       int current_position = pq.top().second;
+       pq.pop();
+       
+       if(dist[current_position] < current_cost) { continue; }
+       
+       for(int i = 0; i < adjList[current_position].size(); i++)
+       {
+           int next_cost = adjList[current_position][i].first;
+           int next_position = adjList[current_position][i].second;
+           
+           if(dist[next_position] > current_cost + next_cost)
+           {
+               dist[next_position] = current_cost + next_cost;
+               pq.push({-dist[next_position], next_position});
+           }
+       }
+       
+    }
+}
 
 int main(void)
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-
-
-	cin >> N >> M;
-	res.resize(N + 1);
-	mindist.resize(N + 1);
-	visited.resize(N + 1);
-
-	fill(visited.begin(), visited.end(), false);
-	fill(mindist.begin(), mindist.end(), INT_MAX);
-
-	for (int i = 0; i < M; i++)
-	{
-		int u, v, w;
-		cin >> u >> v >> w;
-		res[u].push_back(make_pair(v, w));
-	}
-
-	int A, B;
-	cin >> A >> B;
-
-	q.push(make_pair(0, A));
-	mindist[A] = 0;
-
-	while (!q.empty())
-	{
-		edge cur = q.top();
-		q.pop();
-		int c = cur.second;
-		if (visited[c]) continue;
-		visited[c] = true;
-		for (int i = 0; i < res[c].size(); i++)
-		{
-			edge temp = res[c][i];
-			int next = temp.first;
-			int value = temp.second;
-
-			if (mindist[next] > mindist[c] + value)
-			{
-				mindist[next] = mindist[c] + value;
-				q.push(make_pair(mindist[next], next));
-			}
-		}
-	}
-
-	cout << mindist[B] << "\n";
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin >> N >> M;
+    fill(dist, dist + N + 1, MAX_INT);
+    
+    for(int i = 0; i < M; i++)
+    {
+        int start, end, cost;
+        cin >> start >> end >> cost;
+        
+        adjList[start].push_back(make_pair(cost, end));
+    }
+    
+    int answer_start, answer_end;
+    cin >> answer_start >> answer_end;
+    
+    Dijkstra(answer_start);
+    
+    cout << dist[answer_end];
+    
+    return 0;
 }
