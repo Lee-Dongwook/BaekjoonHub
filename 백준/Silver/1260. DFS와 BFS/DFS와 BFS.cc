@@ -1,86 +1,84 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <stack>
 #include <queue>
+#include <algorithm>
+#define MAX 1001
 using namespace std;
 
-int N, M, S;
-vector<int>adjList[1001];
-bool isvisited[1001] = { false, };
-bool issvisited[1001] = { false, };
-stack<int>st;
-queue<int>que;
+int N, M, V;
+vector<int> adjList[MAX];
+bool isvisited[MAX] = {false , };
 
-void DFS(int V)
+void DFS(int start)
 {
-	st.push(V);
+    isvisited[start] = true;
+    cout << start << " ";
 
-	while (!st.empty())
-	{
-		int cur = st.top();
-		st.pop();
+    sort(adjList[start].begin(), adjList[start].end());
 
-		if (isvisited[cur]) { continue; }
-		isvisited[cur] = true;
+    for(int i = 0; i < adjList[start].size(); i++)
+    {
+        int next = adjList[start][i];
 
-		cout << cur << " ";
-
-		for (int i = adjList[cur].size() - 1; i >= 0; i--)
-		{
-			int next = adjList[cur][i];
-			st.push(next);
-		}
-	}
+        if(isvisited[next] == false)
+        {
+            DFS(next);
+        }
+    }
 }
 
-void BFS(int V)
+void BFS(int start)
 {
-	que.push(V);
-	while (!que.empty())
-	{
-		int cur = que.front();
-		que.pop();
+    queue<int> q;
+    q.push(start);
+    isvisited[start] = true;
 
-		if (issvisited[cur]) { continue; }
-		issvisited[cur] = true;
+    while(!q.empty())
+    {
+        int current = q.front();
+        q.pop();
 
-		cout << cur << " ";
+        cout << current << " ";
+        
+        sort(adjList[current].begin(), adjList[current].end());
 
-		for (int i = 0; i < adjList[cur].size(); i++)
-		{
-			int next = adjList[cur][i];
-			que.push(next);
-		}
-	}
+        for(int i = 0; i < adjList[current].size(); i++)
+        {
+            int next = adjList[current][i];
 
+            if(isvisited[next] == false)
+            {
+                q.push(next);
+                isvisited[next] = true;
+            }
+        }
+    }
 }
 
 int main(void)
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(0);
-	cout.tie(0);
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
 
-	cin >> N >> M >> S;
+    cin >> N >> M >> V;
 
-	for (int i = 0; i < M; i++)
-	{
-		int u, v;
-		cin >> u >> v;
+    for(int i = 0; i < M; i++)
+    {
+        int start, end;
+        cin >> start >> end;
 
-		adjList[u].push_back(v);
-		adjList[v].push_back(u);
-	}
+        adjList[start].push_back(end);
+        adjList[end].push_back(start);
+    }
 
-	for (int i = 0; i < 1001; i++)
-	{
-		sort(adjList[i].begin(), adjList[i].end());
-	}
+    DFS(V);
 
-	DFS(S);
-	cout << endl;
-	BFS(S);
+    fill(isvisited, isvisited + MAX, false);
+    
+    cout << "\n";
 
-	return 0;
+    BFS(V);
+
+    return 0;
 }
