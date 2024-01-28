@@ -1,29 +1,25 @@
 #include <iostream>
 #include <vector>
-#define MAX 101
 using namespace std;
 
-int N, M;
+int total, connect;
 int cnt = 0;
-vector<int> adjList[MAX];
-bool isvisited[MAX];
+vector<int> vec[101];
+bool isvisited[101] = {false, };
 
-void DFS(int start)
-{
+void dfs(int start) {
     isvisited[start] = true;
     cnt += 1;
     
-    for(int i = 0; i < adjList[start].size(); i++)
-    {
-        int next = adjList[start][i];
+    for(int i = 0; i < vec[start].size(); i++) {
+        int next = vec[start][i];
         
-        if(isvisited[next] == false)
-        {
-            DFS(next);
+        if(isvisited[next] == false) {
+            isvisited[next] = true;
+            dfs(next);
         }
     }
 }
-
 
 int main(void)
 {
@@ -31,19 +27,17 @@ int main(void)
     cin.tie(0);
     cout.tie(0);
     
-    cin >> N >> M;
+    cin >> total >> connect;
     
-    for(int i = 0; i < M; i++)
-    {
+    while(connect--){
         int start, end;
         cin >> start >> end;
         
-        adjList[start].push_back(end);
-        adjList[end].push_back(start);
+        vec[start].push_back(end);
+        vec[end].push_back(start);
     }
     
-    DFS(1);
-    
+    dfs(1);
     cout << cnt - 1;
     
     return 0;
