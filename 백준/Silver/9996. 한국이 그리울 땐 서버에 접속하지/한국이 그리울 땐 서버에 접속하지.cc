@@ -1,60 +1,78 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <sstream>
+#include <algorithm>
 using namespace std;
 
-bool isMatch(string pattern, string word) {
-    int p = 0; 
-    int w = 0; 
-    int star_idx = -1; 
-    int w_match_idx = -1; 
-
-    while (w < word.size()) {
-        if (p < pattern.size() && (pattern[p] == word[w])) {
-            p++;
-            w++;
-        } else if (p < pattern.size() && pattern[p] == '*') {
-            star_idx = p;
-            w_match_idx = w;
-            p++;
-        } else if (star_idx != -1) {
-            p = star_idx + 1;
-            w_match_idx++;
-            w = w_match_idx;
-        } else {
-            return false;
-        }
+vector<string> split(string input, char delimiter) {
+    vector<string> result;
+    stringstream ss(input);
+    string temp;
+    
+    while(getline(ss,temp,delimiter)){
+        result.push_back(temp);
     }
-
-   
-    while (p < pattern.size() && pattern[p] == '*') {
-        p++;
-    }
-
-  
-    return (p == pattern.size() && w == word.size());
+    
+    return result;
 }
 
-int main() {
+int main(void)
+{
     ios_base::sync_with_stdio(false);
     cin.tie(0);
     cout.tie(0);
-
+    
     int N;
     cin >> N;
-
-    string pattern;
-    cin >> pattern;
-
-    while (N--) {
-        string word;
-        cin >> word;
-
-        if (isMatch(pattern, word)) {
-            cout << "DA" << endl;
+    
+    string checker;
+    cin >> checker;
+    
+    string frontCheck = split(checker,'*')[0];
+    string backCheck = split(checker,'*')[1];
+    
+    reverse(backCheck.begin(), backCheck.end());
+    
+    
+    while(N--){
+        string data;
+        cin >> data;
+        
+        if(frontCheck.size() + backCheck.size() > data.size())
+        {
+            cout << "NE"<< "\n";
         } else {
-            cout << "NE" << endl;
+        
+        bool isTrue = true;
+        
+        // 전반부 체크
+        for(int i = 0; i < frontCheck.size(); i++) {
+            if(data[i] != frontCheck[i]) {
+                isTrue = false;
+                break;
+            }
+        }
+        
+        if(isTrue == true){
+            reverse(data.begin(), data.end());
+        
+            // 후반부 체크
+            for(int i = 0; i < backCheck.size(); i++) {
+                if(data[i] != backCheck[i]) {
+                    isTrue = false;
+                    break;
+                }
+            }  
+        }
+        
+        if(isTrue == false) {
+            cout << "NE" << "\n";
+        } else if (isTrue == true) {
+            cout << "DA" << "\n";
+        }
         }
     }
-
+    
+    
     return 0;
 }
